@@ -9,7 +9,7 @@ export default function Home() {
     { src: "/jeans.png", alt: "jeans placeholder" },
   ];
   return (
-    <div className="items-center justify-items-center flex flex-col">
+    <div className="items-center content-center place-items-center place-self-center justify-items-center flex flex-col p-30">
       <Gallery images={tops} />
       <Gallery images={bottoms} />
     </div>
