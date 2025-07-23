@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { generateUploadButton } from "@uploadthing/react";
+import "@uploadthing/react/styles.css";
 
 export default function Gallery({ images: initialImages = [] }) {
     const UploadButton = generateUploadButton({
@@ -38,85 +39,46 @@ export default function Gallery({ images: initialImages = [] }) {
     };
 
     return (
-        <div className="relative w-full max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
-            {/* Main image container */}
-            <div className="relative w-full h-96 bg-gray-50 flex items-center justify-center">
-                {images.length > 0 ? (
-                    <>
-                        <Image
-                            src={images[slideIndex].src}
-                            alt={images[slideIndex].alt}
-                            fill
-                            style={{ objectFit: 'contain' }}
-                            className="transition-opacity duration-300"
-                        />
-                        
-                        {/* Navigation buttons - only show if more than 1 image */}
-                        {images.length > 1 && (
-                            <>
-                                <button 
-                                    onClick={() => plusSlides(-1)} 
-                                    className="absolute top-1/2 left-4 z-10 flex items-center justify-center w-10 h-10 bg-white/80 backdrop-blur-sm rounded-full shadow-lg cursor-pointer transform -translate-y-1/2 hover:bg-white transition-colors duration-200"
-                                >
-                                    <span className="text-xl font-bold text-gray-700">‹</span>
-                                </button>
-                                
-                                <button 
-                                    onClick={() => plusSlides(1)} 
-                                    className="absolute top-1/2 right-4 z-10 flex items-center justify-center w-10 h-10 bg-white/80 backdrop-blur-sm rounded-full shadow-lg cursor-pointer transform -translate-y-1/2 hover:bg-white transition-colors duration-200"
-                                >
-                                    <span className="text-xl font-bold text-gray-700">›</span>
-                                </button>
-                            </>
-                        )}
-                    </>
-                ) : (
-                    <div className="text-center text-gray-500">
-                        <div className="text-6xl mb-4">📷</div>
-                        <p className="text-lg font-medium">No images yet</p>
-                        <p className="text-sm">Upload your first image below</p>
-                    </div>
-                )}
+        <div className="flex items-center justify-center gap-6 w-full max-w-4xl mx-auto">
+            <button
+                onClick={() => plusSlides(-1)}
+                className="bg-white hover:bg-gray-300 flex items-center justify-center w-12 h-12 text-3xl font-bold text-gray-600 hover:text-black transition-colors duration-200"
+                disabled={images.length === 0}
+            >
+                &lt;
+            </button>
+            
+            <div className="relative w-64 h-64 rounded-lg flex items-center justify-center">
+                <Image
+                        src={images[slideIndex].src}
+                        alt={images[slideIndex].alt}
+                        fill 
+                        style={{ objectFit: 'contain' }}
+                        className="transition-opacity duration-300 rounded-lg"
+                />
             </div>
-            
-            {/* Slide indicators - only show if more than 1 image */}
-            {images.length > 1 && (
-                <div className="flex justify-center py-3 space-x-2 bg-gray-50">
-                    {images.map((_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => setSlideIndex(index)}
-                            className={`w-2 h-2 rounded-full transition-all duration-200 ${
-                                index === slideIndex 
-                                    ? 'bg-blue-500 w-6' 
-                                    : 'bg-gray-300 hover:bg-gray-400'
-                            }`}
-                        />
-                    ))}
-                </div>
-            )}
-            
-            {/* Upload section */}
-            <div className="p-6 bg-gray-50 border-t">
-                <div className="flex items-center justify-center">
-                    <UploadButton
-                        endpoint="imageUploader"
-                        onClientUploadComplete={handleUploadComplete}
-                        onUploadError={(error) => {
-                            console.error("Upload error:", error);
-                            alert(`Upload failed: ${error.message}`);
-                        }}
-                        appearance={{
-                            button: "bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
-                            allowedContent: "text-sm text-gray-600 mt-2"
-                        }}
-                    />
-                </div>
-                {images.length > 0 && (
-                    <p className="text-center text-sm text-gray-500 mt-3">
-                        {images.length} image{images.length > 1 ? 's' : ''} uploaded
-                    </p>
-                )}
+
+            <button 
+                onClick={() => plusSlides(1)} 
+                className="bg-white hover:bg-gray-300 flex items-center justify-center w-12 h-12 text-3xl font-bold text-gray-600 hover:text-black transition-colors duration-200"
+                disabled={images.length === 0}
+            >
+                &gt;
+            </button>
+
+            <div className="ml-4">
+                <UploadButton 
+                    className="ut-button:bg-blue-500 ut-button:hover:bg-blue-600 ut-button:text-white ut-button:font-bold ut-button:text-2xl ut-button:w-12 ut-button:h-12 ut-button:rounded-full ut-button:transition-colors ut-button:duration-200"
+                    endpoint="imageUploader"
+                    onClientUploadComplete={handleUploadComplete}
+                    onUploadError={(error) => {
+                        console.error("Upload error:", error);
+                        alert(`Upload failed: ${error.message}`);
+                    }}
+                    content={{
+                        button: "+"
+                    }}
+                />
             </div>
         </div>
     )
